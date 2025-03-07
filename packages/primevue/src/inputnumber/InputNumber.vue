@@ -1,8 +1,9 @@
 <template>
-    <span :class="cx('root')" v-bind="ptmi('root')">
+    <span :class="cx('root')" v-bind="ptmi('root')" :data-p="dataP">
         <InputText
             ref="input"
             :id="inputId"
+            :name="$formName"
             role="spinbutton"
             :class="[cx('pcInputText'), inputClass]"
             :style="inputStyle"
@@ -28,17 +29,18 @@
             @blur="onInputBlur"
             :pt="ptm('pcInputText')"
             :unstyled="unstyled"
+            :data-p="dataP"
         />
-        <span v-if="showButtons && buttonLayout === 'stacked'" :class="cx('buttonGroup')" v-bind="ptm('buttonGroup')">
+        <span v-if="showButtons && buttonLayout === 'stacked'" :class="cx('buttonGroup')" v-bind="ptm('buttonGroup')" :data-p="dataP">
             <slot name="incrementbutton" :listeners="upButtonListeners">
-                <button :class="[cx('incrementButton'), incrementButtonClass]" v-on="upButtonListeners" :disabled="disabled" :tabindex="-1" aria-hidden="true" type="button" v-bind="ptm('incrementButton')">
+                <button :class="[cx('incrementButton'), incrementButtonClass]" v-on="upButtonListeners" :disabled="disabled" :tabindex="-1" aria-hidden="true" type="button" v-bind="ptm('incrementButton')" :data-p="dataP">
                     <slot :name="$slots.incrementicon ? 'incrementicon' : 'incrementbuttonicon'">
                         <component :is="incrementIcon || incrementButtonIcon ? 'span' : 'AngleUpIcon'" :class="[incrementIcon, incrementButtonIcon]" v-bind="ptm('incrementIcon')" data-pc-section="incrementicon" />
                     </slot>
                 </button>
             </slot>
             <slot name="decrementbutton" :listeners="downButtonListeners">
-                <button :class="[cx('decrementButton'), decrementButtonClass]" v-on="downButtonListeners" :disabled="disabled" :tabindex="-1" aria-hidden="true" type="button" v-bind="ptm('decrementButton')">
+                <button :class="[cx('decrementButton'), decrementButtonClass]" v-on="downButtonListeners" :disabled="disabled" :tabindex="-1" aria-hidden="true" type="button" v-bind="ptm('decrementButton')" :data-p="dataP">
                     <slot :name="$slots.decrementicon ? 'decrementicon' : 'decrementbuttonicon'">
                         <component :is="decrementIcon || decrementButtonIcon ? 'span' : 'AngleDownIcon'" :class="[decrementIcon, decrementButtonIcon]" v-bind="ptm('decrementIcon')" data-pc-section="decrementicon" />
                     </slot>
@@ -46,7 +48,17 @@
             </slot>
         </span>
         <slot name="incrementbutton" :listeners="upButtonListeners">
-            <button v-if="showButtons && buttonLayout !== 'stacked'" :class="[cx('incrementButton'), incrementButtonClass]" v-on="upButtonListeners" :disabled="disabled" :tabindex="-1" aria-hidden="true" type="button" v-bind="ptm('incrementButton')">
+            <button
+                v-if="showButtons && buttonLayout !== 'stacked'"
+                :class="[cx('incrementButton'), incrementButtonClass]"
+                v-on="upButtonListeners"
+                :disabled="disabled"
+                :tabindex="-1"
+                aria-hidden="true"
+                type="button"
+                v-bind="ptm('incrementButton')"
+                :data-p="dataP"
+            >
                 <slot :name="$slots.incrementicon ? 'incrementicon' : 'incrementbuttonicon'">
                     <component :is="incrementIcon || incrementButtonIcon ? 'span' : 'AngleUpIcon'" :class="[incrementIcon, incrementButtonIcon]" v-bind="ptm('incrementIcon')" data-pc-section="incrementicon" />
                 </slot>
@@ -62,6 +74,7 @@
                 aria-hidden="true"
                 type="button"
                 v-bind="ptm('decrementButton')"
+                :data-p="dataP"
             >
                 <slot :name="$slots.decrementicon ? 'decrementicon' : 'decrementbuttonicon'">
                     <component :is="decrementIcon || decrementButtonIcon ? 'span' : 'AngleDownIcon'" :class="[decrementIcon, decrementButtonIcon]" v-bind="ptm('decrementIcon')" data-pc-section="decrementicon" />
@@ -73,6 +86,7 @@
 </template>
 
 <script>
+import { cn } from '@primeuix/utils';
 import { clearSelection, getSelection } from '@primeuix/utils/dom';
 import { isNotEmpty } from '@primeuix/utils/object';
 import AngleDownIcon from '@primevue/icons/angledown';
@@ -579,7 +593,7 @@ export default {
             return false;
         },
         isDecimalSign(char) {
-            if (this._decimal.test(char)) {
+            if ((this.locale?.includes('fr') && ['.', ','].includes(char)) || this._decimal.test(char)) {
                 this._decimal.lastIndex = 0;
 
                 return true;
@@ -634,10 +648,12 @@ export default {
             let newValueStr;
 
             if (sign.isMinusSign) {
-                if (selectionStart === 0) {
+                const isNewMinusSign = minusCharIndex === -1;
+
+                if (selectionStart === 0 || selectionStart === currencyCharIndex + 1) {
                     newValueStr = inputValue;
 
-                    if (minusCharIndex === -1 || selectionEnd !== 0) {
+                    if (isNewMinusSign || selectionEnd !== 0) {
                         newValueStr = this.insertText(inputValue, text, 0, selectionEnd);
                     }
 
@@ -782,7 +798,7 @@ export default {
 
             if (valueStr != null) {
                 newValue = this.parseValue(valueStr);
-                newValue = !newValue && !this.allowEmpty ? 0 : newValue;
+                newValue = !newValue && !this.allowEmpty ? this.min || 0 : newValue;
                 this.updateInput(newValue, insertedValueStr, operation, valueStr);
 
                 this.handleOnInput(event, currentValue, newValue);
@@ -864,7 +880,15 @@ export default {
                     this.$refs.input.$el.setSelectionRange(selectionEnd, selectionEnd);
                 } else if (newLength === currentLength) {
                     if (operation === 'insert' || operation === 'delete-back-single') {
-                        this.$refs.input.$el.setSelectionRange(selectionEnd + 1, selectionEnd + 1);
+                        let newSelectionEnd = selectionEnd;
+
+                        if (insertedValueStr === '0') {
+                            newSelectionEnd = selectionEnd + 1;
+                        } else {
+                            newSelectionEnd = newSelectionEnd + Number(this.isDecimalSign(value) || this.isDecimalSign(insertedValueStr));
+                        }
+
+                        this.$refs.input.$el.setSelectionRange(newSelectionEnd, newSelectionEnd);
                     } else if (operation === 'delete-single') {
                         this.$refs.input.$el.setSelectionRange(selectionEnd - 1, selectionEnd - 1);
                     } else if (operation === 'delete-range' || operation === 'spin') {
@@ -955,7 +979,7 @@ export default {
         },
         clearTimer() {
             if (this.timer) {
-                clearInterval(this.timer);
+                clearTimeout(this.timer);
             }
         },
         maxBoundry() {
@@ -991,6 +1015,15 @@ export default {
         },
         getFormatter() {
             return this.numberFormat;
+        },
+        dataP() {
+            return cn({
+                invalid: this.$invalid,
+                fluid: this.$fluid,
+                filled: this.$variant === 'filled',
+                [this.size]: this.size,
+                [this.buttonLayout]: this.showButtons && this.buttonLayout
+            });
         }
     },
     components: {

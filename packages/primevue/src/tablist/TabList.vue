@@ -3,6 +3,7 @@
         <button
             v-if="showNavigators && isPrevButtonEnabled"
             ref="prevButton"
+            type="button"
             v-ripple
             :class="cx('prevButton')"
             :aria-label="prevButtonAriaLabel"
@@ -14,14 +15,17 @@
             <component :is="templates.previcon || 'ChevronLeftIcon'" aria-hidden="true" v-bind="ptm('prevIcon')" />
         </button>
         <div ref="content" :class="cx('content')" @scroll="onScroll" v-bind="ptm('content')">
-            <div ref="tabs" :class="cx('tabList')" role="tablist" :aria-orientation="$pcTabs.orientation || 'horizontal'" v-bind="ptm('tabList')">
+            <div ref="tabs" :class="cx('tabList')" role="tablist"
+                 :aria-orientation="$pcTabs.orientation || 'horizontal'" v-bind="ptm('tabList')">
                 <slot></slot>
-                <span ref="inkbar" :class="cx('activeBar')" role="presentation" aria-hidden="true" v-bind="ptm('activeBar')"></span>
+                <span ref="inkbar" :class="cx('activeBar')" role="presentation" aria-hidden="true"
+                      v-bind="ptm('activeBar')"></span>
             </div>
         </div>
         <button
             v-if="showNavigators && isNextButtonEnabled"
             ref="nextButton"
+            type="button"
             v-ripple
             :class="cx('nextButton')"
             :aria-label="nextButtonAriaLabel"
@@ -66,9 +70,9 @@ export default {
         }
     },
     mounted() {
-        this.$nextTick(() => {
+        setTimeout(() => {
             this.updateInkBar();
-        });
+        }, 150);
 
         if (this.showNavigators) {
             this.updateButtonState();
@@ -89,18 +93,24 @@ export default {
         },
         onPrevButtonClick() {
             const content = this.$refs.content;
-            const width = getWidth(content);
-            const pos = Math.abs(content.scrollLeft) - width;
-            const scrollLeft = pos <= 0 ? 0 : pos;
+            const buttonWidths = this.getVisibleButtonWidths();
+            const width = getWidth(content) - buttonWidths;
+            const currentScrollLeft = Math.abs(content.scrollLeft);
+            const scrollStep = width * 0.8;
+            const targetScrollLeft = currentScrollLeft - scrollStep;
+            const scrollLeft = Math.max(targetScrollLeft, 0);
 
             content.scrollLeft = isRTL(content) ? -1 * scrollLeft : scrollLeft;
         },
         onNextButtonClick() {
             const content = this.$refs.content;
-            const width = getWidth(content) - this.getVisibleButtonWidths();
-            const pos = width + Math.abs(content.scrollLeft);
-            const lastPos = content.scrollWidth - width;
-            const scrollLeft = pos >= lastPos ? lastPos : pos;
+            const buttonWidths = this.getVisibleButtonWidths();
+            const width = getWidth(content) - buttonWidths;
+            const currentScrollLeft = Math.abs(content.scrollLeft);
+            const scrollStep = width * 0.8;
+            const targetScrollLeft = currentScrollLeft + scrollStep;
+            const maxScrollLeft = content.scrollWidth - width;
+            const scrollLeft = Math.min(targetScrollLeft, maxScrollLeft);
 
             content.scrollLeft = isRTL(content) ? -1 * scrollLeft : scrollLeft;
         },
@@ -139,9 +149,14 @@ export default {
             }
         },
         getVisibleButtonWidths() {
-            const { prevBtn, nextBtn } = this.$refs;
+            const { prevButton, nextButton } = this.$refs;
+            let width = 0;
 
-            return [prevBtn, nextBtn].reduce((acc, el) => (el ? acc + getWidth(el) : acc), 0);
+            if (this.showNavigators) {
+                width = (prevButton?.offsetWidth || 0) + (nextButton?.offsetWidth || 0);
+            }
+
+            return width;
         }
     },
     computed: {
