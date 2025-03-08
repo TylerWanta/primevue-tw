@@ -7,7 +7,7 @@
  * @module galleria
  *
  */
-import type { DefineComponent, DesignToken, EmitFn, PassThrough } from '@primevue/core';
+import type { DefineComponent, DesignToken, EmitFn, HintedString, PassThrough } from '@primevue/core';
 import type { ComponentHooks } from '@primevue/core/basecomponent';
 import type { PassThroughOptions } from 'primevue-vaultic/passthrough';
 import { ButtonHTMLAttributes, HTMLAttributes, TransitionProps, VNode } from 'vue';
@@ -348,7 +348,7 @@ export interface GalleriaProps {
      * Position of thumbnails.
      * @defaultValue bottom
      */
-    thumbnailsPosition?: 'bottom' | 'top' | 'left' | 'right' | undefined;
+    thumbnailsPosition?: HintedString<'bottom' | 'top' | 'left' | 'right'> | undefined;
     /**
      * Height of the viewport in vertical thumbnail.
      * @defaultValue 300px
@@ -368,7 +368,7 @@ export interface GalleriaProps {
      * Position of indicators.
      * @defaultValue bottom
      */
-    indicatorsPosition?: 'bottom' | 'top' | 'left' | 'right' | undefined;
+    indicatorsPosition?: HintedString<'bottom' | 'top' | 'left' | 'right'> | undefined;
     /**
      * Base zIndex value to use in layering.
      * @defaultValue 0
@@ -467,6 +467,14 @@ export interface GalleriaSlots {
          * Index of the indicator item
          */
         index: number;
+        /**
+         * Current active item index as a number.
+         */
+        activeIndex: number;
+        /**
+         * Index of the element in tabbing order.
+         */
+        tabindex: number;
     }): VNode[];
     /**
      * Custom thumbnail template.

@@ -10,10 +10,11 @@
 </template>
 
 <script>
-import { addClass, blockBodyScroll, unblockBodyScroll } from '@primeuix/utils/dom';
+import { addClass } from '@primeuix/utils/dom';
 import { ZIndex } from '@primeuix/utils/zindex';
 import FocusTrap from 'primevue-vaultic/focustrap';
 import Portal from 'primevue-vaultic/portal';
+import { blockBodyScroll, unblockBodyScroll } from 'primevue-vaultic/utils';
 import BaseGalleria from './BaseGalleria.vue';
 import GalleriaContent from './GalleriaContent.vue';
 

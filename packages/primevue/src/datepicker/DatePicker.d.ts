@@ -529,7 +529,7 @@ export interface DatePickerProps {
      * Defines the quantity of the selection.
      * @defaultValue single
      */
-    selectionMode?: 'single' | 'multiple' | 'range' | undefined;
+    selectionMode?: HintedString<'single' | 'multiple' | 'range'> | undefined;
     /**
      * Format of the date. Defaults to PrimeVue Locale configuration.
      */
@@ -558,7 +558,7 @@ export interface DatePickerProps {
      * Icon position of the component. This only applies if the showIcon option is set to true.
      * @defaultValue 'button'
      */
-    iconDisplay?: 'button' | 'input' | undefined;
+    iconDisplay?: HintedString<'button' | 'input'> | undefined;
     /**
      * Icon of the datepicker button.
      */
@@ -597,7 +597,7 @@ export interface DatePickerProps {
      * Type of view to display.
      * @defaultValue date
      */
-    view?: 'date' | 'month' | 'year' | undefined;
+    view?: HintedString<'date' | 'month' | 'year'> | undefined;
     /**
      * The minimum selectable date.
      */
@@ -657,7 +657,7 @@ export interface DatePickerProps {
      * Specifies hour format.
      * @defaultValue 24
      */
-    hourFormat?: '12' | '24' | undefined;
+    hourFormat?: HintedString<'12' | '24'> | undefined;
     /**
      * Hours to change per step.
      * @defaultValue 1
@@ -706,7 +706,7 @@ export interface DatePickerProps {
     /**
      * Defines the size of the component.
      */
-    size?: 'small' | 'large' | undefined;
+    size?: HintedString<'small' | 'large'> | undefined;
     /**
      * When present, it specifies that the component should have invalid state style.
      * @defaultValue false
@@ -719,9 +719,9 @@ export interface DatePickerProps {
     disabled?: boolean | undefined;
     /**
      * Specifies the input variant of the component.
-     * @defaultValue outlined
+     * @defaultValue null
      */
-    variant?: 'outlined' | 'filled' | undefined;
+    variant?: HintedString<'outlined' | 'filled'> | undefined | null;
     /**
      * When present, it specifies that an input field is read-only.
      * @defaultValue false
@@ -736,10 +736,6 @@ export interface DatePickerProps {
      * @defaultValue body
      */
     appendTo?: HintedString<'body' | 'self'> | undefined | HTMLElement;
-    /**
-     * Identifier of the element.
-     */
-    id?: string | undefined;
     /**
      * Identifier of the underlying input element.
      */

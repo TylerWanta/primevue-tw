@@ -24,8 +24,8 @@ export default {
         return {
             code1: {
                 basic: `
-import PrimeVue from 'primevue-vaultic/config';
-import Aura from '@primevue/themes/aura';
+import PrimeVue from 'primevue/config';
+import Aura from '@primeuix/themes/aura';
 
 const app = createApp(App);
 

@@ -42,19 +42,21 @@
 </template>
 
 <script>
-import { addClass, blockBodyScroll, focus, unblockBodyScroll } from '@primeuix/utils/dom';
+import { addClass, focus } from '@primeuix/utils/dom';
 import { ZIndex } from '@primeuix/utils/zindex';
 import TimesIcon from '@primevue/icons/times';
 import Button from 'primevue-vaultic/button';
 import FocusTrap from 'primevue-vaultic/focustrap';
 import Portal from 'primevue-vaultic/portal';
+import { blockBodyScroll, unblockBodyScroll } from 'primevue-vaultic/utils';
 import BaseDrawer from './BaseDrawer.vue';
+
 
 export default {
     name: 'Drawer',
     extends: BaseDrawer,
     inheritAttrs: false,
-    emits: ['update:visible', 'show', 'after-show', 'hide', 'after-hide'],
+    emits: ['update:visible', 'show', 'after-show', 'hide', 'after-hide', 'before-hide'],
     data() {
         return {
             containerVisible: this.visible
@@ -113,6 +115,8 @@ export default {
             if (this.modal) {
                 !this.isUnstyled && addClass(this.mask, 'p-overlay-mask-leave');
             }
+
+            this.$emit('before-hide');
         },
         onLeave() {
             this.$emit('hide');
@@ -212,12 +216,12 @@ export default {
                     }
                 };
 
-                document.addEventListener('click', this.outsideClickListener);
+                document.addEventListener('click', this.outsideClickListener, true);
             }
         },
         unbindOutsideClickListener() {
             if (this.outsideClickListener) {
-                document.removeEventListener('click', this.outsideClickListener);
+                document.removeEventListener('click', this.outsideClickListener, true);
                 this.outsideClickListener = null;
             }
         },

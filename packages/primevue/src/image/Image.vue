@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { addClass, blockBodyScroll, focus, isAttributeEquals, unblockBodyScroll } from '@primeuix/utils/dom';
+import { addClass, focus, isAttributeEquals } from '@primeuix/utils/dom';
 import { ZIndex } from '@primeuix/utils/zindex';
 import EyeIcon from '@primevue/icons/eye';
 import RefreshIcon from '@primevue/icons/refresh';
@@ -66,6 +66,7 @@ import TimesIcon from '@primevue/icons/times';
 import UndoIcon from '@primevue/icons/undo';
 import FocusTrap from 'primevue-vaultic/focustrap';
 import Portal from 'primevue-vaultic/portal';
+import { blockBodyScroll, unblockBodyScroll } from 'primevue-vaultic/utils';
 import BaseImage from './BaseImage.vue';
 
 export default {

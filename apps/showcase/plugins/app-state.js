@@ -3,7 +3,7 @@ import PrimeVue from 'primevue-vaultic/config';
 import { reactive } from 'vue';
 
 const $appState = {
-    install: (Vue, options) => {
+    install: (Vue) => {
         Vue.config.globalProperties.$appState = reactive({
             preset: 'Aura',
             primary: 'noir',
@@ -15,12 +15,20 @@ const $appState = {
             announcement: null,
             storageKey: 'primevue',
             designer: {
-                key: 'primevue-designer-theme',
+                verified: false,
+                csrfToken: null,
+                themeLimit: null,
                 active: false,
+                activeView: 'dashboard',
                 activeTab: '0',
-                preset: null,
-                customTokens: [],
-                acTokens: []
+                theme: {
+                    key: null,
+                    name: null,
+                    preset: null,
+                    config: null
+                },
+                acTokens: [],
+                themes: []
             }
         });
     }

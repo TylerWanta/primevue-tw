@@ -1,12 +1,12 @@
 <template>
-    <div :class="[cx('message'), message.styleClass]" role="alert" aria-live="assertive" aria-atomic="true" v-bind="ptm('message')">
+    <div :class="[cx('message'), message.styleClass]" role="alert" aria-live="assertive" aria-atomic="true" v-bind="ptm('message')" @click="onMessageClick" @mouseenter="onMouseEnter" @mouseleave="onMouseLeave">
         <component v-if="templates.container" :is="templates.container" :message="message" :closeCallback="onCloseClick" />
         <div v-else :class="[cx('messageContent'), message.contentStyleClass]" v-bind="ptm('messageContent')">
             <template v-if="!templates.message">
                 <component :is="templates.messageicon ? templates.messageicon : templates.icon ? templates.icon : iconComponent && iconComponent.name ? iconComponent : 'span'" :class="cx('messageIcon')" v-bind="ptm('messageIcon')" />
                 <div :class="cx('messageText')" v-bind="ptm('messageText')">
                     <span :class="cx('summary')" v-bind="ptm('summary')">{{ message.summary }}</span>
-                    <div :class="cx('detail')" v-bind="ptm('detail')">{{ message.detail }}</div>
+                    <div v-if="message.detail" :class="cx('detail')" v-bind="ptm('detail')">{{ message.detail }}</div>
                 </div>
             </template>
             <component v-else :is="templates.message" :message="message"></component>
@@ -34,6 +34,8 @@ export default {
     extends: BaseComponent,
     emits: ['close'],
     closeTimeout: null,
+    createdAt: null,
+    lifeRemaining: null,
     props: {
         message: {
             type: null,
@@ -70,15 +72,20 @@ export default {
     },
     mounted() {
         if (this.message.life) {
-            this.closeTimeout = setTimeout(() => {
-                this.close({ message: this.message, type: 'life-end' });
-            }, this.message.life);
+            this.lifeRemaining = this.message.life;
+            this.startTimeout();
         }
     },
     beforeUnmount() {
         this.clearCloseTimeout();
     },
     methods: {
+        startTimeout() {
+            this.createdAt = new Date().valueOf();
+            this.closeTimeout = setTimeout(() => {
+                this.close({ message: this.message, type: 'life-end' });
+            }, this.lifeRemaining);
+        },
         close(params) {
             this.$emit('close', params);
         },
@@ -90,6 +97,37 @@ export default {
             if (this.closeTimeout) {
                 clearTimeout(this.closeTimeout);
                 this.closeTimeout = null;
+            }
+        },
+        onMessageClick(event) {
+            this.props?.onClick && this.props.onClick({ originalEvent: event, message: this.message });
+        },
+        onMouseEnter(event) {
+            if (this.props?.onMouseEnter) {
+                this.props.onMouseEnter({ originalEvent: event, message: this.message });
+
+                if (event.defaultPrevented) {
+                    return;
+                }
+
+                if (this.message.life) {
+                    this.lifeRemaining = this.createdAt + this.lifeRemaining - Date().valueOf();
+                    this.createdAt = null;
+                    this.clearCloseTimeout();
+                }
+            }
+        },
+        onMouseLeave(event) {
+            if (this.props?.onMouseLeave) {
+                this.props.onMouseLeave({ originalEvent: event, message: this.message });
+
+                if (event.defaultPrevented) {
+                    return;
+                }
+
+                if (this.message.life) {
+                    this.startTimeout();
+                }
             }
         }
     },
