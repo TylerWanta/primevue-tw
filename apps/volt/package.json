@@ -34,15 +34,15 @@
         "build:prebuild": "node ./scripts/prebuild.mjs"
     },
     "dependencies": {
-        "@docsearch/js": "catalog:app",
-        "@primeuix/themes": "catalog:",
+        "@docsearch/js": "^3",
+        "@primeuix/themes": "^1.0.0",
         "@primevue/core": "workspace:*",
         "@primevue/forms": "workspace:*",
         "@primevue/nuxt-module": "workspace:*",
-        "primeicons": "catalog:",
-        "primevue": "workspace:*",
-        "chart.js": "catalog:app",
-        "quill": "catalog:app",
+        "primeicons": "^7.0.0",
+        "primevue-vaultic": "workspace:*",
+        "chart.js": "3.3.2",
+        "quill": "2.0.0",
         "superstruct": "^2.0.2",
         "valibot": "^0.42.1",
         "yup": "1.4.0",
@@ -52,16 +52,16 @@
         "@stackblitz/sdk": "^1.8.2",
         "autoprefixer": "^10",
         "jsdom": "^19.0.0",
-        "nuxt": "catalog:app",
+        "nuxt": "3.15.4",
         "postcss": "^8.4.31",
-        "sass": "catalog:app",
-        "sass-loader": "catalog:app",
+        "sass": "1.45.0",
+        "sass-loader": "8.0.2",
         "tailwind-merge": "^3.0.2",
         "tailwindcss": "^4",
-        "tailwindcss-primeui": "catalog:",
+        "tailwindcss-primeui": "^0.5.0",
         "@tailwindcss/vite": "4.0.9",
         "typedoc": "0.27.9",
-        "vite": "catalog:app"
+        "vite": "6.0.11"
     },
     "engines": {
         "node": ">=12.11.0"

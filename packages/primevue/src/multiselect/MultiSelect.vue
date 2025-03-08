@@ -227,21 +227,20 @@ import { absolutePosition, addStyle, findSingle, focus, getFirstFocusableElement
 import { equals, findLastIndex, isEmpty, isNotEmpty, isPrintableCharacter, resolveFieldData } from '@primeuix/utils/object';
 import { ZIndex } from '@primeuix/utils/zindex';
 import { FilterService } from '@primevue/core/api';
-import { ConnectedOverlayScrollHandler } from '@primevue/core/utils';
 import CheckIcon from '@primevue/icons/check';
 import ChevronDownIcon from '@primevue/icons/chevrondown';
 import SearchIcon from '@primevue/icons/search';
 import SpinnerIcon from '@primevue/icons/spinner';
 import TimesIcon from '@primevue/icons/times';
-import Checkbox from 'primevue/checkbox';
-import Chip from 'primevue/chip';
-import IconField from 'primevue/iconfield';
-import InputIcon from 'primevue/inputicon';
-import InputText from 'primevue/inputtext';
-import OverlayEventBus from 'primevue/overlayeventbus';
-import Portal from 'primevue/portal';
-import Ripple from 'primevue/ripple';
-import VirtualScroller from 'primevue/virtualscroller';
+import Checkbox from 'primevue-vaultic/checkbox';
+import Chip from 'primevue-vaultic/chip';
+import IconField from 'primevue-vaultic/iconfield';
+import InputIcon from 'primevue-vaultic/inputicon';
+import InputText from 'primevue-vaultic/inputtext';
+import OverlayEventBus from 'primevue-vaultic/overlayeventbus';
+import Portal from 'primevue-vaultic/portal';
+import Ripple from 'primevue-vaultic/ripple';
+import VirtualScroller from 'primevue-vaultic/virtualscroller';
 import BaseMultiSelect from './BaseMultiSelect.vue';
 
 export default {
@@ -784,15 +783,15 @@ export default {
             }
         },
         bindScrollListener() {
-            if (!this.scrollHandler) {
-                this.scrollHandler = new ConnectedOverlayScrollHandler(this.$refs.container, () => {
-                    if (this.overlayVisible) {
-                        this.hide();
-                    }
-                });
-            }
+            // if (!this.scrollHandler) {
+            //     this.scrollHandler = new ConnectedOverlayScrollHandler(this.$refs.container, () => {
+            //         if (this.overlayVisible) {
+            //             this.hide();
+            //         }
+            //     });
+            // }
 
-            this.scrollHandler.bindScrollListener();
+            // this.scrollHandler.bindScrollListener();
         },
         unbindScrollListener() {
             if (this.scrollHandler) {

@@ -58,8 +58,8 @@
 import { find, findSingle } from '@primeuix/utils/dom';
 import { resolve } from '@primeuix/utils/object';
 import BaseComponent from '@primevue/core/basecomponent';
-import Ripple from 'primevue/ripple';
-import Tooltip from 'primevue/tooltip';
+import Ripple from 'primevue-vaultic/ripple';
+import Tooltip from 'primevue-vaultic/tooltip';
 import { mergeProps } from 'vue';
 
 export default {

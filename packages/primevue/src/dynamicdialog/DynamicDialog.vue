@@ -13,9 +13,8 @@
 </template>
 
 <script>
-import { uuid } from '@primeuix/utils';
-import Dialog from 'primevue/dialog';
-import DynamicDialogEventBus from 'primevue/dynamicdialogeventbus';
+import Dialog from 'primevue-vaultic/dialog';
+import DynamicDialogEventBus from 'primevue-vaultic/dynamicdialogeventbus';
 import BaseDynamicDialog from './BaseDynamicDialog.vue';
 
 export default {
