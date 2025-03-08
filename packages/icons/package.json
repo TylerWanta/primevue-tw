@@ -99,7 +99,7 @@
         "dev:link": "pnpm link --global && npm link"
     },
     "dependencies": {
-        "@primeuix/utils": "^0.3.2",
+        "@primeuix/utils": "^0.5.1",
         "@primevue/core": "workspace:*"
     },
     "engines": {

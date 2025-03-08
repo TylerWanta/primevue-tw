@@ -227,7 +227,6 @@ import { absolutePosition, addStyle, findSingle, focus, getFirstFocusableElement
 import { equals, findLastIndex, isEmpty, isNotEmpty, isPrintableCharacter, resolveFieldData } from '@primeuix/utils/object';
 import { ZIndex } from '@primeuix/utils/zindex';
 import { FilterService } from '@primevue/core/api';
-import { ConnectedOverlayScrollHandler } from '@primevue/core/utils';
 import CheckIcon from '@primevue/icons/check';
 import ChevronDownIcon from '@primevue/icons/chevrondown';
 import SearchIcon from '@primevue/icons/search';
@@ -784,15 +783,15 @@ export default {
             }
         },
         bindScrollListener() {
-            if (!this.scrollHandler) {
-                this.scrollHandler = new ConnectedOverlayScrollHandler(this.$refs.container, () => {
-                    if (this.overlayVisible) {
-                        this.hide();
-                    }
-                });
-            }
+            // if (!this.scrollHandler) {
+            //     this.scrollHandler = new ConnectedOverlayScrollHandler(this.$refs.container, () => {
+            //         if (this.overlayVisible) {
+            //             this.hide();
+            //         }
+            //     });
+            // }
 
-            this.scrollHandler.bindScrollListener();
+            // this.scrollHandler.bindScrollListener();
         },
         unbindScrollListener() {
             if (this.scrollHandler) {

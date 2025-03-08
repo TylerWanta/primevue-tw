@@ -60,8 +60,8 @@
         "dev:link": "pnpm link --global && npm link"
     },
     "dependencies": {
-        "@primeuix/styled": "^0.3.2",
-        "@primeuix/utils": "^0.3.2"
+        "@primeuix/styled": "^0.5.0",
+        "@primeuix/utils": "^0.5.1"
     },
     "peerDependencies": {
         "vue": "^3.5.0"
